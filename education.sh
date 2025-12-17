@@ -64,9 +64,9 @@ cp ../source/{font.ttf,image.jpg,script.py,source.cpp} .
 
 files="../source/06.07.cpp ../source/06.08.cpp"
 
-g++ -c -std=c++23 -Wall -Wextra -Wpedantic -O0 ../source/06.06.hpp -o ../source/06.06.hpp.gch
+g++-15 -c -std=c++23 -Wall -Wextra -Wpedantic -O0 ../source/06.06.hpp -o ../source/06.06.hpp.gch
 
-g++    -std=c++23 -Wall -Wextra -Wpedantic -O0 $files -ltbb -o 06.08
+g++-15    -std=c++23 -Wall -Wextra -Wpedantic -O0 $files -ltbb -o 06.08
 
 rm ../source/06.06.hpp.gch
 
@@ -74,14 +74,14 @@ rm ../source/06.06.hpp.gch
 
 files="../source/06.16.cpp 06.13.o 06.14.o 06.15.o"
 
-g++ -c -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 -xc++-system-header print
+g++-15 -c -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 -xc++-system-header print
 
-g++ -c -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 ../source/06.15.cxx
+g++-15 -c -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 ../source/06.15.cxx
 
-g++ -c -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 ../source/06.13.cxx
+g++-15 -c -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 ../source/06.13.cxx
 
-g++ -c -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 ../source/06.14.cxx
+g++-15 -c -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 ../source/06.14.cxx
 
-g++    -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 $files -o 06.16
+g++-15    -std=c++23 -fmodules-ts -Wall -Wextra -Wpedantic -O0 $files -o 06.16
 
 ###################################################################################################

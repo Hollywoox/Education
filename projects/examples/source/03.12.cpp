@@ -1,6 +1,6 @@
 ////////////////////////////////////////
 
-#include <print>
+#include <iostream>
 
 ////////////////////////////////////////
 
@@ -10,14 +10,14 @@ public :
 
 	void test_v1() const 
 	{ 
-		std::print("Entity::test_v1\n");
+		std::cout << "Entity::test_v1\n";
 	}
 
 protected :
 
 	void test_v2() const 
 	{ 
-		std::print("Entity::test_v2\n");
+		std::cout << "Entity::test_v2\n";
 	}
 };
 
