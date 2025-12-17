@@ -1,5 +1,0 @@
-/Users/hollywoox/Education/projects/hw/06.05/build/CMakeFiles/shared_v1.dir
-/Users/hollywoox/Education/projects/hw/06.05/build/CMakeFiles/shared_v2.dir
-/Users/hollywoox/Education/projects/hw/06.05/build/CMakeFiles/06.05.dir
-/Users/hollywoox/Education/projects/hw/06.05/build/CMakeFiles/edit_cache.dir
-/Users/hollywoox/Education/projects/hw/06.05/build/CMakeFiles/rebuild_cache.dir

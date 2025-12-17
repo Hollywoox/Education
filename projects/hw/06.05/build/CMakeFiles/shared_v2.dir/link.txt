@@ -1,1 +1,0 @@
-/usr/bin/c++  -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o libshared_v2.dylib -install_name @rpath/libshared_v2.dylib CMakeFiles/shared_v2.dir/libshared_v2.cpp.o
