@@ -1,5 +1,31 @@
 //////////////////////////////////////////////////////////////////////
 
+// chapter : Generic Programming
+
+//////////////////////////////////////////////////////////////////////
+
+// section : Constant Expressions
+
+//////////////////////////////////////////////////////////////////////
+
+// content : Constant Expressions
+//
+// content : Declaration Specifier constexpr
+//
+// content : Immediate Functions
+//
+// content : Declaration Specifier consteval
+//
+// content : Compile-Time Factorials
+//
+// content : Static Initialization
+//
+// content : Declaration Specifier constinit
+//
+// content : Dynamic Initialization
+
+//////////////////////////////////////////////////////////////////////
+
 #include <cassert>
 #include <type_traits>
 #include <vector>

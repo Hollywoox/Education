@@ -1,5 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 
+// chapter : Memory Management
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+// section : Resource Handlers
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+// content : Shared Ownership
+//
+// content : Control Blocks
+//
+// content : Reference Counting
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 #include <cstddef>
 #include <utility>
 
@@ -13,16 +29,20 @@ class Controller : private boost::noncopyable
 {
 public :
 
-    void increase() 
-    { 
-        ++m_counter; 
+    virtual ~Controller() = default;
+
+//  --------------------------------
+
+    void increase()
+    {
+        ++m_counter;
     }
 
 //  --------------------------------
 
-    void decrease() 
-    { 
-        if (--m_counter == 0) 
+    void decrease()
+    {
+        if (--m_counter == 0)
         {
             clear();
         }
@@ -30,9 +50,7 @@ public :
 
 protected :
 
-             Controller() = default;
-
-    virtual ~Controller() = default;
+    Controller() = default;
 
 private :
 

@@ -1,5 +1,27 @@
 /////////////////////////////////////////////////////////////////
 
+// chapter : Object-Oriented Programming
+
+/////////////////////////////////////////////////////////////////
+
+// section : Structures and Classes
+
+/////////////////////////////////////////////////////////////////
+
+// content : Nested Classes
+//
+// content : Function std::to_string
+//
+// content : Pointer this
+//
+// content : Mutable Data Members
+//
+// content : Storage Class Specifier mutable
+//
+// content : Logical Constancy
+
+/////////////////////////////////////////////////////////////////
+
 #include <cassert>
 #include <string>
 
@@ -20,13 +42,6 @@ public :
 
 //  -------------------------------------------------------------
 
-    auto const & make_string() const
-    {
-        return m_cache.string(*this);
-    }
-
-//  -------------------------------------------------------------
-
     void set(int x) 
     {
         if (x > 0)
@@ -35,6 +50,13 @@ public :
 
             m_cache.clear();
         }
+    }
+
+//  -------------------------------------------------------------
+
+    auto const & make_string() const
+    {
+        return m_cache.string(*this);
     }
 
 private :

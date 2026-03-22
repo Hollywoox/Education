@@ -1,60 +1,48 @@
-/////////////////////////////////////////
+////////////////////////////////////////////////////////
 
-#include <algorithm>
-#include <set>
-#include <vector>
+// chapter : Data Structures
 
-/////////////////////////////////////////
+////////////////////////////////////////////////////////
 
-#include <benchmark/benchmark.h>
+// section : Hashing Containers
 
-/////////////////////////////////////////
+////////////////////////////////////////////////////////
 
-void test_v1(benchmark::State & state)
+// content : Hash Functions
+//
+// content : Java String Hash Algorithm
+//
+// content : Functor std::hash
+
+////////////////////////////////////////////////////////
+
+#include <functional>
+#include <string>
+#include <tuple>
+
+////////////////////////////////////////////////////////
+
+auto hash(std::string const & string)
 {
-    for (auto element : state)
-    {
-        std::vector < int > vector;
+	auto seed = 0uz;
 
-		for (auto i = 1'000; i > 0; --i)
-		{
-			vector.push_back(i);
-		}
+	for (auto element : string) 
+	{
+		(seed *= 31) += element;
+	}
 
-		std::ranges::sort(vector);
-
-		benchmark::DoNotOptimize(vector);
-    }
+	return seed;
 }
 
-/////////////////////////////////////////
-
-void test_v2(benchmark::State & state)
-{
-    for (auto element : state)
-    {
-        std::set < int > set;
-
-		for (auto i = 1'000; i > 0; --i)
-		{
-			set.insert(i);
-		}
-
-		benchmark::DoNotOptimize(set);
-    }
-}
-
-/////////////////////////////////////////
-
-BENCHMARK(test_v1);
-
-BENCHMARK(test_v2);
-
-/////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 int main()
 {
-    benchmark::RunSpecifiedBenchmarks();
+	std::ignore = hash("aaaaa");
+
+//  ----------------------------------------------------
+
+	std::ignore = std::hash < std::string > ()("aaaaa");
 }
 
-/////////////////////////////////////////
+////////////////////////////////////////////////////////

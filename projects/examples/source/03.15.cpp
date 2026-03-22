@@ -1,50 +1,139 @@
-///////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
-// support : Boost.CompressedPair
+// chapter : Object-Oriented Programming
 
-///////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
-class Entity_v1 {};
+// section : Dynamic Polymorphism
 
-///////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
-class Entity_v2 { public : char x = '\0';                       Entity_v1 entity_v1; };
+// content : Upcasting Type Conversions
+//
+// content : Static and Dynamic Types
+//
+// content : Slicing Objects
+//
+// content : Dynamic Polymorphism
+//
+// content : Virtual Functions
+//
+// content : Function Specifier virtual
+//
+// content : Overriding Functions
+//
+// content : Function Specifier override
+//
+// content : Function and Class Specifier final
+//
+// content : Range-Based Statement for
+//
+// content : Virtual Destructors
 
-class Entity_v3 { public : char x = '\0'; [[no_unique_address]] Entity_v1 entity_v1; };
+/////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////////////
+#include <print>
+#include <vector>
 
-class Client_v1 : public 		 Entity_v1 {};
+/////////////////////////////////////////////////////////////
 
-class Client_v2 : public virtual Entity_v1 {};
+class Entity 
+{
+public :
 
-class Server_v1 : public 		 Entity_v1 {};
+// ~Entity() = default; // error
 
-class Server_v2 : public virtual Entity_v1 {};
+//  ------------------------------------
 
-///////////////////////////////////////////////////////////////////////////////////////
+	virtual ~Entity()
+	{
+		std::print("Entity::~Entity\n");
+	}
 
-class Router_v1 : public Client_v1, public Server_v1 {};
+//  ------------------------------------
 
-class Router_v2 : public Client_v2, public Server_v2 {};
+	virtual void test() const
+	{ 
+		std::print("Entity::test\n");
+	}
+};
 
-///////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+class Client : public Entity
+{
+public :
+
+   ~Client() override
+	{
+		std::print("Client::~Client\n");
+	}
+
+//  ------------------------------------
+
+	void test() const override final
+	{ 
+		std::print("Client::test\n");
+	}
+};
+
+/////////////////////////////////////////////////////////////
+
+class Server final : public Entity 
+{
+public:
+
+   ~Server() override
+	{
+		std::print("Server::~Server\n");
+	}
+};
+
+/////////////////////////////////////////////////////////////
+
+class Router : private Entity {};
+
+/////////////////////////////////////////////////////////////
 
 int main()
 {
-	static_assert(sizeof(Entity_v1) == 1);
+//  std::vector < Client > clients; // bad
 
-//  --------------------------------------
+//  std::vector < Server > servers; // bad
 
-	static_assert(sizeof(Entity_v2) == 2);
+//  std::vector < Router > routers; // bad
 
-	static_assert(sizeof(Entity_v3) == 1);
+//  ---------------------------------------------------------
 
-//  --------------------------------------
+	[[maybe_unused]] Entity * entity_1 = new Client;
 
-	static_assert(sizeof(Router_v1) == 2);
+	[[maybe_unused]] Entity * entity_2 = new Server;
 
-	static_assert(sizeof(Router_v2) != 1);
+//	[[maybe_unused]] Entity * entity_3 = new Router; // error
+
+//  ---------------------------------------------------------
+
+	std::vector < Entity * > entities;
+
+//  ---------------------------------------------------------
+
+    entities.push_back(entity_1);
+
+	entities.push_back(entity_2);
+
+//  ---------------------------------------------------------
+
+    for (auto entity : entities)
+    {
+        entity->test();
+    }
+
+//  ---------------------------------------------------------
+
+    for (auto entity : entities)
+    {
+        delete entity;
+    }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////

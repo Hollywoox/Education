@@ -1,5 +1,29 @@
 //////////////////////////////////////////////////////////////
 
+// chapter : Debugging and Profiling
+
+//////////////////////////////////////////////////////////////
+
+// section : Exception Handling
+
+//////////////////////////////////////////////////////////////
+
+// content : Exception Safety Guarantees
+//
+// content : Exceptions in Constructors and Destructors
+//
+// content : Function Try Blocks
+//
+// content : Non-Throwing Functions
+//
+// content : Function Specifier noexcept
+//
+// content : Operator noexcept
+//
+// content : Function std::empty
+
+//////////////////////////////////////////////////////////////
+
 #include <cassert>
 #include <print>
 #include <stdexcept>

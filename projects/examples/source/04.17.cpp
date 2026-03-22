@@ -1,5 +1,29 @@
 ////////////////////////////////////////////////////////////////////////
 
+// chapter : Generic Programming
+
+////////////////////////////////////////////////////////////////////////
+
+// section : Metaprogramming
+
+////////////////////////////////////////////////////////////////////////
+
+// content : Template Metaprogramming
+//
+// content : Class Templates
+//
+// content : Class Template Specializations
+//
+// content : Non-Type Template Parameters
+//
+// content : Static Data Members
+//
+// content : Recursive Template Instantiation
+//
+// content : Compile-Time Factorials
+
+////////////////////////////////////////////////////////////////////////
+
 template < int X > struct Factorial
 {
 	static inline auto const value = X * Factorial < X - 1 > ::value;

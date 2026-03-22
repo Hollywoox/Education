@@ -1,64 +1,71 @@
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+
+// chapter : Memory Management
+
+/////////////////////////////////////////////////////////
+
+// section : Dynamic Memory
+
+/////////////////////////////////////////////////////////
+
+// content : Type Specifier alignas
+//
+// content : Microbenchmarking
+
+/////////////////////////////////////////////////////////
 
 #include <cstdint>
 #include <vector>
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
 #include <benchmark/benchmark.h>
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
-struct Entity_v1 { std::int8_t x = 0; std::int32_t y = 0; std::int16_t z = 0; };
+struct            Entity_v1 { std::int8_t x = 0; };
 
-struct Entity_v2 { std::int8_t x = 0; std::int16_t y = 0; std::int32_t z = 0; };
+struct alignas(8) Entity_v2 { std::int8_t x = 0; };
 
-////////////////////////////////////////////////////////////////////////////////
-
-struct            Entity_v3 { std::int8_t x = 0; };
-
-struct alignas(8) Entity_v4 { std::int8_t x = 0; };
-
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
 void test(benchmark::State & state)
 {
+    auto argument = state.range(0);
+
 	auto size = 1'000'000uz;
 
-	std::vector < Entity_v3 > entities_v3(size);
+	std::vector < Entity_v1 > entities_v1(size);
 
-	std::vector < Entity_v4 > entities_v4(size);
+	std::vector < Entity_v2 > entities_v2(size);
 	
     for (auto element : state)
     {
 		for (auto i = 0uz; i < size; ++i)
         {
-            if (state.range(0) == 1) { entities_v3[i].x = 1; }
+            switch (argument)
+            {
+                case 1 : { entities_v1[i].x = 1; break; }
 
-            if (state.range(0) == 2) { entities_v4[i].x = 1; }
+                case 2 : { entities_v2[i].x = 1; break; }
+            }
         }
 
-        benchmark::DoNotOptimize(entities_v3);
+        benchmark::DoNotOptimize(entities_v1);
 
-        benchmark::DoNotOptimize(entities_v4);
+        benchmark::DoNotOptimize(entities_v2);
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
 BENCHMARK(test)->Arg(1)->Arg(2);
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
 int main()
 {
-	static_assert(sizeof(Entity_v1) == 12 && alignof(Entity_v1) == 4);
-
-	static_assert(sizeof(Entity_v2) ==  8 && alignof(Entity_v2) == 4);
-
-//  ------------------------------------------------------------------
-
     benchmark::RunSpecifiedBenchmarks();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////

@@ -1,40 +1,121 @@
-///////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+// chapter : Data Structures
+
+//////////////////////////////////////////////////////////////////////////////
+
+// section : Nested Containers
+
+//////////////////////////////////////////////////////////////////////////////
+
+// content : Nested and Multidimensional Containers
+
+//////////////////////////////////////////////////////////////////////////////
+
+#include <cassert>
+#include <cstddef>
+#include <iterator>
+#include <vector>
+
+//////////////////////////////////////////////////////////////////////////////
 
 #include <boost/multi_array.hpp>
 
-///////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+template < std::size_t D > void fill_v1(auto const & container, auto iterator)
+{
+	*iterator = std::size(container);
+
+	if constexpr (D > 1)
+	{
+		fill_v1 < D - 1 > (*std::begin(container), ++iterator);
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+template < std::size_t D > void fill_v2(auto const & container, auto iterator)
+{
+	if constexpr (D > 1)
+	{
+		for (auto const & element : container) 
+		{
+			fill_v2 < D - 1 > (element, (iterator++)->begin());
+		}
+	}
+	else
+	{
+		for (auto const & element : container) 
+		{
+			*iterator++ = element;
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+template < typename T, std::size_t D > auto make_array(auto const & container)
+{
+	std::vector < typename boost::multi_array < T, D > ::index > sizes(D, 0);
+
+	fill_v1 < D > (container, std::begin(sizes));
+	
+	boost::multi_array < T, D > array(sizes);
+	
+	fill_v2 < D > (container, std::begin(array));
+
+	return array;
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 int main()
 {
 	auto size = 5uz;
 
-//  -------------------------------------------------------------------
+//  ----------------------------------------------------------
 
-	boost::multi_array < int, 2 > array(boost::extents[size][size]);
+	std::vector < std::vector < std::vector < int > > > vector
+	(
+		size, std::vector < std::vector < int > > 
+		(
+			size, std::vector < int > 
+			(
+				size, 0
+			)
+		)
+	);
 
-//  -------------------------------------------------------------------
+//  ----------------------------------------------------------
 
 	for (auto i = 0uz; i < size; ++i)
 	{
 		for (auto j = 0uz; j < size; ++j)
 		{
-			array[i][j] = j + 1;
+			for (auto k = 0uz; k < size; ++k)
+			{
+				vector[i][j][k] = k + 1;
+			}
 		}
 	}
 
-//  -------------------------------------------------------------------
+//  ----------------------------------------------------------
 
-	using range_t = boost::multi_array_types::index_range;
+	auto array = make_array < int, 3 > (vector);
 
-//  -------------------------------------------------------------------
+//  ----------------------------------------------------------
 
-	auto view = array[boost::indices[range_t(0, 2)][range_t(0, 5, 2)]];
-
-//  -------------------------------------------------------------------
-
-	assert(view[0][0] == 1 && view[0][1] == 3 && view[0][2] == 5);
-
-	assert(view[1][0] == 1 && view[1][1] == 3 && view[1][2] == 5);
+	for (auto i = 0uz; i < size; ++i)
+	{
+		for (auto j = 0uz; j < size; ++j)
+		{
+			for (auto k = 0uz; k < size; ++k)
+			{
+				assert(array[i][j][k] == vector[i][j][k]);
+			}
+		}
+	}
 }
 
-///////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////

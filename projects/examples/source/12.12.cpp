@@ -1,53 +1,43 @@
-///////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 
-#include <string>
-#include <string_view>
+#include <array>
+#include <cassert>
+#include <cmath>
+#include <charconv>
+#include <iterator>
 
-///////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 
-#include <benchmark/benchmark.h>
-
-///////////////////////////////////////////////////////////////////
-
-void test_v1(benchmark::State & state)
+auto equal(double x, double y, double epsilon = 1e-6)
 {
-    std::string string(65'536, 'a');
-
-    for (auto element : state)
-    {
-        benchmark::DoNotOptimize(string.substr(0, state.range(0)));
-    }
-
-    state.SetComplexityN(state.range(0));
+	return std::abs(x - y) < epsilon;
 }
 
-///////////////////////////////////////////////////////////////////
-
-void test_v2(benchmark::State & state)
-{
-    std::string string(65'536, 'a');
-
-    std::string_view view = string;
-
-    for (auto element : state)
-    {
-        benchmark::DoNotOptimize(view.substr(0, state.range(0)));
-    }
-
-    state.SetComplexityN(state.range(0));
-}
-
-///////////////////////////////////////////////////////////////////
-
-BENCHMARK(test_v1)->DenseRange(8'192, 65'537, 8'192)->Complexity();
-
-BENCHMARK(test_v2)->DenseRange(8'192, 65'537, 8'192)->Complexity();
-
-///////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 
 int main()
 {
-    benchmark::RunSpecifiedBenchmarks();
+    std::array < char, 1'000 > array = {};
+
+//  ------------------------------------------------------------
+
+    auto begin = std::begin(array), end = std::end(array);
+
+//  ------------------------------------------------------------
+
+    std::to_chars(begin, end, 1.0, std::chars_format::fixed, 1);
+
+//  ------------------------------------------------------------
+
+    auto x = 0.0;
+
+//  ------------------------------------------------------------
+
+    std::from_chars(begin, end, x);
+
+//  ------------------------------------------------------------
+
+    assert(equal(x, 1.0));
 }
 
-///////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////

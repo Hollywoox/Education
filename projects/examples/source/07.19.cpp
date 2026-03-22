@@ -1,5 +1,27 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+// chapter : Debugging and Profiling
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+// section : Software Analysis Tools
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+// content : Logging
+//
+// content : Library Boost.Log
+//
+// content : Function std::call_once
+//
+// content : Flag std::once_flag
+//
+// content : Function std::format
+//
+// content : Formatting Dates and Times
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include <cstddef>
 #include <cstdint>
 #include <exception>
@@ -31,7 +53,7 @@ public :
 
 	enum class Severity : std::uint8_t
 	{
-		debug, trace, error, fatal
+		trace, debug, error, fatal
 	};
 
 //  ---------------------------------------------------------------------------------------------
@@ -148,9 +170,9 @@ private :
 
         switch (boost::log::extract_or_throw < Severity > (attributes["Severity"]))
         {
-            case Severity::debug : { stream << " | debug"; break; }
+			case Severity::trace : { stream << " | trace"; break; }
 
-            case Severity::trace : { stream << " | trace"; break; }
+            case Severity::debug : { stream << " | debug"; break; }
 
             case Severity::error : { stream << " | error"; break; }
 
@@ -193,6 +215,8 @@ void test_v1()
 {
 	LOGGER(logger);
 
+	LOGGER_PUT_ERROR(logger, "error");
+
 	throw std::runtime_error("error");
 }
 
@@ -208,7 +232,7 @@ int main()
 {
 	LOGGER(logger);
 
-//  --------------------------------------------------
+//  -----------------------------------------------
 
 	try
 	{
@@ -217,10 +241,6 @@ int main()
 	catch (std::exception const & exception)
 	{
 		LOGGER_PUT_FATAL(logger, exception.what());
-	}
-	catch (...)
-	{
-		LOGGER_PUT_FATAL(logger, "unknown exception");
 	}
 }
 

@@ -1,8 +1,21 @@
 ///////////////////////////////////////////////////////////////
 
-#include <cassert>
+// chapter : Algorithms and Ranges
+
+///////////////////////////////////////////////////////////////
+
+// section : Ranges and Views
+
+///////////////////////////////////////////////////////////////
+
+// content : Algorithm std::ranges::nth_element
+
+///////////////////////////////////////////////////////////////
+
 #include <algorithm>
+#include <cassert>
 #include <iterator>
+#include <random>
 #include <vector>
 
 ///////////////////////////////////////////////////////////////
@@ -13,23 +26,21 @@ int main()
 
 //  -----------------------------------------------------------
 
-	auto iterator = std::begin(std::ranges::remove(vector, 1));
+	std::ranges::shuffle(vector, std::default_random_engine());
 
 //  -----------------------------------------------------------
 
-	assert(std::size(vector) == 5);
+	auto iterator = std::next(std::begin(vector), 2);
 
 //  -----------------------------------------------------------
 
-    assert(iterator == std::next(std::begin(vector), 4));
+	std::ranges::nth_element(vector, iterator);
 
 //  -----------------------------------------------------------
 
-	vector.erase(iterator, std::end(vector));
+    assert(vector[0] < *iterator && vector[1] < *iterator);
 
-//  -----------------------------------------------------------
-
-	assert(vector == std::vector < int > ({ 2, 3, 4, 5 }));
+    assert(vector[3] > *iterator && vector[4] > *iterator);
 }
 
 ///////////////////////////////////////////////////////////////

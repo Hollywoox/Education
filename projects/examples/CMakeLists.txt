@@ -33,22 +33,28 @@ find_package(Boost 1.85 REQUIRED COMPONENTS
 
 #############################################################################################
 
+find_package(glog          REQUIRED COMPONENTS)
 find_package(GTest         REQUIRED COMPONENTS)
 find_package(benchmark     REQUIRED COMPONENTS)
 find_package(Python        REQUIRED COMPONENTS Interpreter Development)
 find_package(ICU           REQUIRED COMPONENTS i18n uc)
 find_package(nlohmann_json REQUIRED COMPONENTS)
 find_package(PDFHummus     REQUIRED COMPONENTS)
+find_package(zipper        REQUIRED COMPONENTS)
+find_package(libpqxx       REQUIRED COMPONENTS)
 find_package(TBB           REQUIRED COMPONENTS)
 
 #############################################################################################
 
 include_directories(        ${Boost_INCLUDE_DIRS})
+include_directories(         ${glog_INCLUDE_DIRS})
 include_directories(        ${GTEST_INCLUDE_DIRS})
 include_directories(    ${benchmark_INCLUDE_DIRS})
 include_directories(       ${Python_INCLUDE_DIRS})
 include_directories(${nlohmann_json_INCLUDE_DIRS})
 include_directories(    ${PDFHummus_INCLUDE_DIRS})
+include_directories(       ${zipper_INCLUDE_DIRS})
+include_directories(      ${libpqxx_INCLUDE_DIRS})
 include_directories(          ${TBB_INCLUDE_DIRS})
 
 #############################################################################################
@@ -57,6 +63,7 @@ set(debug
 
     01.02
     01.03
+
     02.01
     02.02
     02.03
@@ -101,6 +108,7 @@ set(debug
     02.43
     02.44
     02.45
+
     03.01
     03.02
     03.03
@@ -114,15 +122,18 @@ set(debug
     03.11
     03.12
     03.13
+    03.14
     03.15
     03.16
     03.17
     03.18
+    03.19
     03.20
     03.21
     03.22
     03.23
     03.24
+    03.25
     03.26
     03.27
     03.28
@@ -133,9 +144,7 @@ set(debug
     03.33
     03.34
     03.35
-    03.36
-    03.37
-    03.38
+
     04.01
     04.02
     04.03
@@ -175,6 +184,7 @@ set(debug
     04.37
     04.38
     04.39
+
     05.01
     05.02
     05.03
@@ -199,10 +209,12 @@ set(debug
     05.22
     05.23
     05.24
+
     06.02
     06.03
     06.04
     06.12
+
     07.01
     07.02
     07.03
@@ -220,33 +232,36 @@ set(debug
     07.18
     07.19
     07.21
+
     08.01
     08.02
     08.03
-    08.05
+    08.04
+    08.06
     08.07
     08.08
     08.09
+    08.10
     08.11
-    08.12
+    08.13
+    08.14
     08.15
     08.16
-    08.17
-    08.18
+    08.19
+    08.20
     08.21
     08.22
     08.23
     08.24
     08.25
     08.26
-    08.27
-    08.28
-    08.34
-    08.35
+    08.30
+    08.31
+    08.32
     08.36
-    08.39
-    08.40
-    08.41
+    08.37
+    08.38
+
     09.01
     09.02
     09.03
@@ -262,6 +277,7 @@ set(debug
     09.13
     09.15
     09.16
+    09.17
     09.18
     09.20
     09.21
@@ -270,10 +286,10 @@ set(debug
     09.25
     09.26
     09.27
-    09.37
-    09.38
-    09.39
-    09.40
+    09.33
+    09.34
+    09.35
+
     10.01
     10.02
     10.03
@@ -284,7 +300,7 @@ set(debug
     10.08
     10.09
     10.10
-    10.11
+    10.12
     10.13
     10.14
     10.15
@@ -293,27 +309,26 @@ set(debug
     10.18
     10.19
     10.20
+    10.21
     10.22
     10.23
     10.24
     10.25
     10.26
     10.27
-    10.28
     10.29
     10.30
     10.31
-    10.32
+    10.33
     10.34
     10.37
+    10.39
     10.40
-    10.41
+    10.42
     10.43
     10.44
-    10.46
-    10.47
-    10.48
-    10.49
+    10.45
+
     11.01
     11.02
     11.03
@@ -322,7 +337,6 @@ set(debug
     11.06
     11.07
     11.08
-    11.09
     11.10
     11.11
     11.12
@@ -342,33 +356,36 @@ set(debug
     11.26
     11.27
     11.28
+    11.29
     11.30
     11.31
     11.32
+
+    12.01
     12.02
     12.03
-    12.04
+    12.05
     12.06
     12.07
     12.08
     12.09
     12.10
-    12.11
+    12.12
     12.13
+    12.14
     12.15
     12.16
     12.17
     12.18
     12.19
     12.20
+    12.21
     12.22
     12.23
     12.24
     12.25
     12.26
-    12.27
-    12.28
-    12.29
+
     13.02
     13.03
     13.04
@@ -387,6 +404,7 @@ set(debug
     13.17
     13.18
     13.19
+
     14.02
     14.03
     14.04
@@ -413,12 +431,14 @@ set(debug
     14.26
     14.27
     14.28
-    14.30
     14.31
-    14.33
+    14.32
     14.34
-    14.36
+    14.35
     14.37
+    14.38
+    14.39
+    14.40
 )
 
 #############################################################################################
@@ -451,21 +471,21 @@ target_compile_options     (06.11 PRIVATE -Wall -Wextra -Wpedantic -O0)
 
 #############################################################################################
 
-add_executable             (06.18 source/06.18.cpp)
+add_executable             (06.17 source/06.17.cpp)
 
-target_include_directories (06.18 PRIVATE ${CMAKE_SOURCE_DIR}/../library_v1/source/)
+target_include_directories (06.17 PRIVATE ${CMAKE_SOURCE_DIR}/../library_v1/source/)
 
-target_compile_options     (06.18 PRIVATE -Wall -Wextra -Wpedantic -O0)
+target_compile_options     (06.17 PRIVATE -Wall -Wextra -Wpedantic -O0)
 
-target_link_libraries      (06.18 PRIVATE ${CMAKE_SOURCE_DIR}/../../libraries/libstatic.a)
+target_link_libraries      (06.17 PRIVATE ${CMAKE_SOURCE_DIR}/../../libraries/libstatic.a)
 
-target_link_libraries      (06.18 PRIVATE ${Boost_LIBRARIES})
+target_link_libraries      (06.17 PRIVATE ${Boost_LIBRARIES})
 
 #############################################################################################
 
 add_executable             (07.14 source/07.14.cpp)
 
-target_compile_options     (07.14 PRIVATE -Wall -Wextra -Wpedantic -O0 -ggdb)
+target_compile_options     (07.14 PRIVATE -Wall -Wextra -Wpedantic -O0 -g)
 
 target_link_libraries      (07.14 PRIVATE -lstdc++exp)
 
@@ -485,11 +505,11 @@ target_link_options        (07.16 PRIVATE -fsanitize=address)
 
 #############################################################################################
 
-# add_executable             (07.20 source/07.20.cpp)
+add_executable             (07.20 source/07.20.cpp)
 
-# target_compile_options     (07.20 PRIVATE -Wall -Wextra -Wpedantic -O0)
+target_compile_options     (07.20 PRIVATE -Wall -Wextra -Wpedantic -O0)
 
-# target_link_libraries      (07.20 PRIVATE )
+target_link_libraries      (07.20 glog::glog)
 
 #############################################################################################
 
@@ -501,13 +521,13 @@ target_link_libraries      (07.22 PRIVATE GTest::gtest)
 
 #############################################################################################
 
-add_executable             (08.20 source/08.20.cpp)
+add_executable             (08.18 source/08.18.cpp)
 
-target_compile_options     (08.20 PRIVATE -Wall -Wextra -Wpedantic -O0)
+target_compile_options     (08.18 PRIVATE -Wall -Wextra -Wpedantic -O0)
 
-target_link_libraries      (08.20 PRIVATE ${Boost_LIBRARIES})
+target_link_libraries      (08.18 PRIVATE ${Boost_LIBRARIES})
 
-target_link_libraries      (08.20 PRIVATE Python::Python)
+target_link_libraries      (08.18 PRIVATE Python::Python)
 
 #############################################################################################
 
@@ -519,13 +539,13 @@ target_compile_definitions (09.14 PRIVATE _GLIBCXX_DEBUG)
 
 #############################################################################################
 
-add_executable             (12.05 source/12.05.cpp)
+add_executable             (12.04 source/12.04.cpp)
 
-target_compile_options     (12.05 PRIVATE -Wall -Wextra -Wpedantic -O0)
+target_compile_options     (12.04 PRIVATE -Wall -Wextra -Wpedantic -O0)
 
-target_link_libraries      (12.05 PRIVATE ${Boost_LIBRARIES})
+target_link_libraries      (12.04 PRIVATE ${Boost_LIBRARIES})
 
-target_link_libraries      (12.05 PRIVATE ICU::i18n ICU::uc)
+target_link_libraries      (12.04 PRIVATE ICU::i18n ICU::uc)
 
 #############################################################################################
 
@@ -537,41 +557,68 @@ target_link_libraries      (13.20 PRIVATE PDFHummus::PDFWriter)
 
 #############################################################################################
 
-# add_executable             (13.21 source/13.21.cpp)
+add_executable             (13.21 source/13.21.cpp)
 
-# target_compile_options     (13.21 PRIVATE -Wall -Wextra -Wpedantic -O0)
+target_compile_options     (13.21 PRIVATE -Wall -Wextra -Wpedantic -O0)
 
-# target_link_libraries      (13.21 PRIVATE )
+target_link_libraries      (13.21 PRIVATE zipper::zipper)
+
+#############################################################################################
+
+add_executable             (13.22 source/13.22.cpp)
+
+target_compile_options     (13.22 PRIVATE -Wall -Wextra -Wpedantic -O0)
+
+target_link_libraries      (13.22 PRIVATE libpqxx::pqxx)
+
+#############################################################################################
+
+add_executable             (14.29 source/14.29.cpp)
+
+target_compile_options     (14.29 PRIVATE -Wall -Wextra -Wpedantic -O0)
+
+target_link_libraries      (14.29 PRIVATE TBB::tbb)
+
+target_link_libraries      (14.29 PRIVATE /usr/lib/gcc/x86_64-linux-gnu/13/libatomic.a)
 
 #############################################################################################
 
 set(release
 
     07.23
-    08.06
-    08.10
-    08.30
-    08.32
+
+    08.05
+    08.27
+    08.28
+    08.29
     08.33
-    08.37
-    08.38
+    08.34
+
     09.19
     09.24
+    09.28
     09.29
+    09.30
     09.31
-    09.33
-    09.35
+    09.32
     09.36
-    09.41
-    10.12
-    10.33
+
+    10.11
+    10.28
+    10.32
     10.35
+    10.36
     10.38
-    10.39
-    12.12
+
+    11.09
+
+    12.11
+
     14.14
-    14.32
-    14.35
+    14.33
+    14.36
+    14.41
+    14.42
 )
 
 #############################################################################################
@@ -592,22 +639,36 @@ endforeach()
 
 #############################################################################################
 
-add_executable             (10.45 source/10.45.cpp)
+add_executable             (10.41 source/10.41.cpp)
 
-target_compile_options     (10.45 PRIVATE -Wall -Wextra -Wpedantic -O3)
+target_compile_options     (10.41 PRIVATE -Wall -Wextra -Wpedantic -O3)
 
-target_link_libraries      (10.45 PRIVATE ${Boost_LIBRARIES})
+target_link_libraries      (10.41 PRIVATE ${Boost_LIBRARIES})
 
-target_link_libraries      (10.45 PRIVATE Python::Python)
+target_link_libraries      (10.41 PRIVATE Python::Python)
 
 #############################################################################################
 
-add_executable             (14.29 source/14.29.cpp)
+add_executable             (14.30 source/14.30.cpp)
 
-target_compile_options     (14.29 PRIVATE -Wall -Wextra -Wpedantic -O3)
+target_compile_options     (14.30 PRIVATE -Wall -Wextra -Wpedantic -O0)
 
-target_link_libraries      (14.29 PRIVATE TBB::tbb)
+target_link_libraries      (14.30 PRIVATE benchmark::benchmark)
 
-target_link_libraries      (14.29 PRIVATE /usr/lib/gcc/x86_64-linux-gnu/13/libatomic.a)
+target_link_libraries      (14.30 PRIVATE TBB::tbb)
+
+target_link_libraries      (14.30 PRIVATE /usr/lib/gcc/x86_64-linux-gnu/13/libatomic.a)
+
+#############################################################################################
+
+add_executable             (14.43 source/14.43.cpp)
+
+target_compile_options     (14.43 PRIVATE -Wall -Wextra -Wpedantic -O3)
+
+target_link_libraries      (14.43 PRIVATE benchmark::benchmark)
+
+target_link_libraries      (14.43 PRIVATE TBB::tbb)
+
+target_link_libraries      (14.43 PRIVATE -ltcmalloc)
 
 #############################################################################################

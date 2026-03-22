@@ -1,46 +1,119 @@
-////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
-#include <map>
+// chapter : Data Structures
+
+//////////////////////////////////////////////////////////////////////////
+
+// section : Hashing Containers
+
+//////////////////////////////////////////////////////////////////////////
+
+// content : D.E.Knuth String Hash Algorithm
+//
+// content : Collisions
+
+//////////////////////////////////////////////////////////////////////////
+
+#include <cstddef>
+#include <cstdint>
+#include <iostream>
+#include <random>
+#include <set>
 #include <string>
-#include <tuple>
-#include <utility>
 
-////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
-int main()
+#include "08.17.hpp"
+
+//////////////////////////////////////////////////////////////////////////
+
+auto make_strings(std::size_t size_1, std::size_t size_2)
 {
-	std::map < int, std::string > map;
+	std::set < std::string > strings;
 
-//  ----------------------------------------------------
+	std::string string(size_2, '_');
 
-	map[1] = "aaaaa";
+	std::uniform_int_distribution distribution(97, 122);
 
-//  ----------------------------------------------------
+	std::default_random_engine engine;
+    
+	while (std::size(strings) < size_1)
+    {
+        for (auto & element : string) 
+		{
+			element = distribution(engine);
+		}
 
-	map.emplace(std::make_pair(2, std::string(5, 'a')));
+		strings.insert(string);
+    }
 
-//  ----------------------------------------------------
-	
-	map.emplace(3, std::string(5, 'a'));
-
-//  ----------------------------------------------------
-
-//	map.emplace(4, 5, 'a'); // error
-
-//  ----------------------------------------------------
-	
-	map.emplace
-	(
-		std::piecewise_construct, 
-			
-		std::forward_as_tuple(5), 
-		
-		std::forward_as_tuple(5, 'a')
-	);
-
-//  ----------------------------------------------------
-
-	map.try_emplace(6, 5, 'a');
+	return strings;
 }
 
-////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+auto hash(std::string const & string) -> std::size_t
+{
+	std::uint32_t seed = std::size(string);
+
+	for (auto element : string)
+	{
+		seed = seed << 5 ^ seed >> 27 ^ element;
+	}
+
+	return seed;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+int main()
+{	
+	std::set < std::size_t > hashes;
+
+//  ----------------------------------------------------------------------
+
+	std::string points;
+
+//  ----------------------------------------------------------------------
+
+	for (auto i = 0uz; auto const & string : make_strings(1'000'000, 10))
+	{
+		hashes.insert(hash(string));
+
+	//  ----------------------------------------------------
+			
+		if (i++ % 1'000 == 0)
+		{
+			points += i == 1 ? "" : ",";
+
+			points += std::to_string(i - 1) + ',';
+
+			points += std::to_string(i - std::size(hashes));
+		}
+	}
+
+//  ----------------------------------------------------------------------
+		
+	Python python;
+
+//  ----------------------------------------------------------------------
+
+	try
+	{
+		auto const & local = python.local();
+
+	//  ------------------------------------------------------------------
+
+		boost::python::exec("from script import make_plot", local, local);
+
+	//  ------------------------------------------------------------------
+
+		local["make_plot"](points.c_str(), "hash");
+	}
+	catch (boost::python::error_already_set const &)
+	{
+		std::cerr << "main : " << Python::exception() << '\n';
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////

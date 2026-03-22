@@ -1,39 +1,55 @@
-//////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+// chapter : Data Structures
+
+///////////////////////////////////////////////////////////////
+
+// section : Sequential Containers
+
+///////////////////////////////////////////////////////////////
+
+// content : Doubly Linked Lists
+//
+// content : Container std::list
+//
+// content : Bidirectional Iterators
+
+///////////////////////////////////////////////////////////////
 
 #include <cassert>
-#include <deque>
 #include <iterator>
+#include <list>
 #include <type_traits>
 
-//////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 int main()
 {
-    std::deque < int > deque = { 1, 2, 3, 4, 5 };
+    std::list < int > list = { 1, 2, 3, 4, 5 };
 
-//  --------------------------------------------------------------
+//  -----------------------------------------------------------
 
-    static_assert
+	static_assert
 	(
 		std::is_same_v 
 		< 
-			decltype(deque)::iterator::iterator_category,
+			decltype(list)::iterator::iterator_category,
 			
-			std::random_access_iterator_tag 
+			std::bidirectional_iterator_tag 
 		> 
 	);
 
-//  --------------------------------------------------------------
+//  -----------------------------------------------------------
+		
+	list.erase(list.insert(std::next(std::begin(list), 0), 1));
 
-	deque.erase(deque.insert(std::next(std::begin(deque), 0), 1));
+	list.erase(list.insert(std::next(std::begin(list), 2), 1));
 
-	deque.erase(deque.insert(std::next(std::begin(deque), 2), 1));
+	list.erase(list.insert(std::next(std::begin(list), 5), 1));
 
-	deque.erase(deque.insert(std::next(std::begin(deque), 5), 1));
+//  -----------------------------------------------------------
 
-//  --------------------------------------------------------------
-
-    assert(deque.at(0) == 1);
+//  assert(list.at(0) == 1); // error
 }
 
-//////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////

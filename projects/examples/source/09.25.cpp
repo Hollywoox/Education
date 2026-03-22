@@ -1,11 +1,24 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 
+// chapter : Memory Management
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// section : Dynamic Memory
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// content : Optionals
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+#include <memory>
 #include <new>
 #include <utility>
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-template < typename T > class Optional 
+template < typename T > class Optional
 {
 public :
 
@@ -13,16 +26,16 @@ public :
 
 //  ---------------------------------------------------------------------------------------
 
-    Optional(T x) 
-    { 
+    Optional(T x)
+    {
         initialize(x);
     }
 
 //  ---------------------------------------------------------------------------------------
 
-    Optional(Optional const & other) 
+    Optional(Optional const & other)
     {
-        if (other.m_x) 
+        if (other.m_x)
         {
             initialize(*other.m_x);
         }
@@ -30,31 +43,28 @@ public :
 
 //  ---------------------------------------------------------------------------------------
 
-    Optional(Optional && other) : m_x(other.m_x)
-    {
-        other.m_x = nullptr;
-    }
+    Optional(Optional && other) : m_x(std::exchange(other.m_x, nullptr)) {}
 
 //  ---------------------------------------------------------------------------------------
 
-   ~Optional() 
-    { 
+   ~Optional()
+    {
         uninitialize();
     }
 
 //  ---------------------------------------------------------------------------------------
 
-    auto & operator=(Optional const & other) 
+    auto & operator=(Optional const & other)
     {
         if (this != &other)
         {
             destroy();
-            
-            if (other.m_x) 
+
+            if (other.m_x)
             {
                 construct(*other.m_x);
             }
-            else 
+            else
             {
                 deallocate();
             }
@@ -70,10 +80,8 @@ public :
         if (this != &other)
 		{
             uninitialize();
-            
-            m_x = other.m_x;
-            
-            other.m_x = nullptr;
+
+            m_x = std::exchange(other.m_x, nullptr);
 		}
 
 		return *this;
@@ -81,37 +89,37 @@ public :
 
 //  ---------------------------------------------------------------------------------------
 
-    auto & operator=(T x) 
+    auto & operator=(T x)
     {
         destroy();
-        
+
         construct(x);
-        
+
         return *this;
     }
 
 private :
 
-    void initialize(T x) 
-    { 
+    void initialize(T x)
+    {
         allocate();
-        
+
         construct(x);
     }
 
 //  ---------------------------------------------------------------------------------------
 
-    void uninitialize() 
-    { 
+    void uninitialize()
+    {
         destroy();
-        
+
         deallocate();
     }
 
 //  ---------------------------------------------------------------------------------------
 
-    void allocate() 
-    { 
+    void allocate()
+    {
         m_x = static_cast < T * > (operator new(sizeof(T), std::align_val_t(s_alignment)));
     }
 
@@ -120,30 +128,30 @@ private :
     void deallocate()
     {
         operator delete(m_x, sizeof(T), std::align_val_t(s_alignment));
-            
+
         m_x = nullptr;
     }
 
 //  ---------------------------------------------------------------------------------------
 
-    void construct(T x) 
+    void construct(T x)
     {
-        if (!m_x) 
+        if (!m_x)
         {
             allocate();
         }
-        
+
         new (m_x) T(x);
     }
 
 //  ---------------------------------------------------------------------------------------
 
-    void destroy() 
-    { 
-        if (m_x) 
+    void destroy()
+    {
+        if (m_x)
         {
-            m_x->~T();
-        } 
+            std::destroy_at(m_x);
+        }
     }
 
 //  ---------------------------------------------------------------------------------------
@@ -160,7 +168,7 @@ private :
 int main()
 {
     Optional < int > optional_1;
-    
+
     Optional < int > optional_2 = 2;
 
     Optional < int > optional_3 = optional_2;

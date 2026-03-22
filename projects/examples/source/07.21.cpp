@@ -1,5 +1,23 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
+// chapter : Debugging and Profiling
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+// section : Software Analysis Tools
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+// content : Testing
+//
+// content : Library Boost.Test
+//
+// content : Distribution std::uniform_real_distribution
+//
+// content : Engine std::default_random_engine
+
+////////////////////////////////////////////////////////////////////////////////////////
+
 #include <algorithm>
 #include <iterator>
 #include <print>
@@ -95,6 +113,10 @@ public :
     {
     public :
 
+        using iterator_category = std::forward_iterator_tag;
+
+    //  ------------------------------------------------------------------
+
         iterator() : m_x(1), m_y(1) {}
 
     //  ------------------------------------------------------------------
@@ -103,9 +125,7 @@ public :
         {
             auto x = *this;
 
-            m_x += m_y;
-
-            std::swap(m_x, m_y);
+            step();
 
             return x;
         }
@@ -114,9 +134,7 @@ public :
 
         auto & operator++() 
         {
-            m_x += m_y;
-
-            std::swap(m_x, m_y);
+            step();
 
             return *this;
         }
@@ -136,6 +154,15 @@ public :
 		}
 
     private :
+
+        void step()
+        {
+            m_x += m_y;
+
+            std::swap(m_x, m_y);
+        }
+
+    //  ------------------------------------------------------------------
 
         int m_x = 1, m_y = 1;
     };

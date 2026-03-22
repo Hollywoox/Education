@@ -1,9 +1,34 @@
-////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
+// chapter : Memory Management
+
+////////////////////////////////////////////////////////////////////////////////
+
+// section : Dynamic Memory
+
+////////////////////////////////////////////////////////////////////////////////
+
+// content : Uninitialized Memory
+//
+// content : Functions operator new and operator delete
+//
+// content : Type std::align_val_t
+//
+// content : Operator new
+//
+// content : Memory Laundering
+//
+// content : Functions std::launder and std::destroy_at
+
+////////////////////////////////////////////////////////////////////////////////
+
+#include <cassert>
+#include <cstddef>
+#include <memory>
 #include <new>
 #include <print>
 
-////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 class Entity
 {
@@ -21,50 +46,48 @@ public :
 		std::print("Entity::~Entity : m_x = {}\n", m_x);
 	}
 
+//  ----------------------------------------------------
+
+	auto get() const
+	{
+		return m_x;
+	}
+
 private :
 
-	int m_x = 0;
+	int const m_x = 0;
 };
 
-////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 int main()
 {
-	auto size = 5uz;
+	auto storage = static_cast < std::byte * >
+	(
+		operator new(sizeof(Entity), std::align_val_t(alignof(Entity)))
+	);
 
-//  ---------------------------------------------
+//  ----------------------------------------------------------------------------
 
-    auto x = operator new(sizeof(Entity) * size);
+	[[maybe_unused]] auto entity_1 = new (storage) Entity(1);
 
-//  ---------------------------------------------
+	[[maybe_unused]] auto entity_2 = new (storage) Entity(2);
 
-	auto entities = static_cast < Entity * > (x);
+//  ----------------------------------------------------------------------------
 
-//  ---------------------------------------------
+//	assert(entity_1->get() == 2); // bad
 
-	for (auto i = 0uz; i < size; ++i)
-	{
-		new (&entities[i]) Entity(i + 1);
-	}
+//  ----------------------------------------------------------------------------
 
-//  ---------------------------------------------
+	assert(std::launder(entity_1)->get() == 2);
 
-	entities[0].~Entity();
+//  ----------------------------------------------------------------------------
 
-//  ---------------------------------------------
+	std::destroy_at(storage);
 
-	new (&entities[0]) Entity(1);
+//  ----------------------------------------------------------------------------
 
-//  ---------------------------------------------
-
-	for (auto i = 0uz; i < size; ++i)
-	{
-		entities[i].~Entity();
-	}
-
-//  ---------------------------------------------
-
-	operator delete(x, sizeof(Entity) * size);
+	operator delete(storage, sizeof(Entity), std::align_val_t(alignof(Entity)));
 }
 
-////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////

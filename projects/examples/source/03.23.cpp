@@ -1,51 +1,80 @@
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
-#include <cassert>
+// chapter : Object-Oriented Programming
 
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
-#include <boost/type_index.hpp>
+// section : Rvalue References
 
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
-class Entity 
-{
-public :
+// content : Identifiability and Movability
+//
+// content : Expression Classification
+//
+// content : Lvalue, Glvalue, Xvalue, Rvalue and Prvalue Expressions
+//
+// content : Rvalue References
+//
+// content : Constant Rvalue References
 
-	virtual ~Entity() = default;
-};
+////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////
+struct Entity {};
 
-class Client : public Entity {};
+////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////
+auto         make_entity_v1() { return Entity(); }
+	  
+auto const   make_entity_v2() { return Entity(); }
+
+////////////////////////////////////////////////////////////////////////////
+
+auto       & make_entity_v3() { static Entity       entity; return entity; }
+
+auto const & make_entity_v4() { static Entity const entity; return entity; }
+
+////////////////////////////////////////////////////////////////////////////
 
 int main()
 {
-	auto x = 1, & y = x;
+//  [[maybe_unused]] Entity       &  entity_01 = make_entity_v1(); // error
 
-//  -----------------------------------------------------------------------------
-		
-	Entity * entity = new Client;
+//  [[maybe_unused]] Entity       &  entity_02 = make_entity_v2(); // error
 
-//  -----------------------------------------------------------------------------
+    [[maybe_unused]] Entity       &  entity_03 = make_entity_v3();
 
-	using boost::typeindex::type_id_with_cvr;
+//  [[maybe_unused]] Entity       &  entity_04 = make_entity_v4(); // error
 
-//  -----------------------------------------------------------------------------
+//  -----------------------------------------------------------------------
 
-	assert(type_id_with_cvr < decltype(      x) > ().pretty_name() == "int"    );
-	
-	assert(type_id_with_cvr < decltype(      y) > ().pretty_name() == "int&"   );
+    [[maybe_unused]] Entity const &  entity_05 = make_entity_v1();
 
-	assert(type_id_with_cvr < decltype( entity) > ().pretty_name() == "Entity*");
+    [[maybe_unused]] Entity const &  entity_06 = make_entity_v2();
 
-	assert(type_id_with_cvr < decltype(*entity) > ().pretty_name() == "Entity&");
+    [[maybe_unused]] Entity const &  entity_07 = make_entity_v3();
 
-//  -----------------------------------------------------------------------------
+    [[maybe_unused]] Entity const &  entity_08 = make_entity_v4();
 
-	delete entity;
+//  -----------------------------------------------------------------------
+
+    [[maybe_unused]] Entity       && entity_09 = make_entity_v1(); 
+
+//  [[maybe_unused]] Entity       && entity_10 = make_entity_v2(); // error
+
+//  [[maybe_unused]] Entity       && entity_11 = make_entity_v3(); // error
+
+//  [[maybe_unused]] Entity       && entity_12 = make_entity_v4(); // error
+
+//  -----------------------------------------------------------------------
+
+    [[maybe_unused]] Entity const && entity_13 = make_entity_v1(); 
+
+    [[maybe_unused]] Entity const && entity_14 = make_entity_v2(); 
+
+//  [[maybe_unused]] Entity const && entity_15 = make_entity_v3(); // error
+
+//  [[maybe_unused]] Entity const && entity_16 = make_entity_v4(); // error
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
